@@ -1,0 +1,26 @@
+{
+  "name": "pic2svg",
+  "version": "0.0.1",
+  "description": "picture to  svg",
+  "main": "canvas.js",
+  "dependencies": {
+    "canvas": "^1.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://zwhu@github.com/zwhu/pic2svg.git"
+  },
+  "keywords": [
+    "svg"
+  ],
+  "author": "zwhu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zwhu/pic2svg/issues"
+  },
+  "homepage": "https://github.com/zwhu/pic2svg#readme"
+}

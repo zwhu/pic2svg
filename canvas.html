@@ -1,156 +1,92 @@
 <!Doctype html>
 <html>
-	<head>
-		<title>nihao...</title>
-	</head>
-	<body>
-		<canvas id="canvas" width="400" height="650">haha</canvas>
-		<script>
-			var canvas = document.getElementById('canvas');
-			var ctx = canvas.getContext('2d');
-			var image = new Image();
-			var sourceWidth = canvas.width;
-			var sourceHeight = canvas.height;
-			var dx = 0;
-			var dy = 0;
-			
-			function getGrayScale(r, g, b) {
-				return (r * 0.3 + g * 0.59 + b * 0.11) | 0;
-			}
-			
-			function getAvg(r, g, b) {
-				return (r + g + b)/3; 
-			}
-			
-			function foo(dx, dy, sourceWidth, sourceHeight) {
-				var imageData = ctx.getImageData(dx, dy, sourceWidth, sourceHeight),
-				data = imageData.data;
-				
-				var newData = [];
-				
-				// m 行
-				for(var m = 0; m < sourceHeight; m++) {					
-					// n 列
-					var f = 4 * sourceWidth * m;
-					var temp = [];
-					for(var n = 0; n < sourceWidth; n++) {
-						
-						var r = data[f +  (4*n)];
-						var g = data[f +  (4*n + 1)];
-						var b = data[f + (4*n + 2)];			
-						var avg = getAvg(r, g, b);
-						
-						if(avg >= 90) {
-							data[f +  (4*n)] = 255;
-							data[f +  (4*n + 1)] = 255;
-							data[f + (4*n + 2)] = 255;								
-						} else {
-							data[f +  (4*n)] = 0;
-							data[f +  (4*n + 1)] = 0;
-							data[f + (4*n + 2)] = 0;	
-						}
-						
-						if(temp.length > 0) {
-							var tAvg = getAvg(temp[0], temp[1], temp[2]);
-							if(tAvg < 90 && avg < 90) {
-								data[f +  (4*n)] = 255;
-								data[f +  (4*n + 1)] = 255;
-								data[f + (4*n + 2)] = 255;								
-							} else if(avg >= 90 && tAvg < 90) {
-								data[f +  (4*n -4)] = 0;
-								data[f +  (4*n + 1 -4)] = 0;
-								data[f + (4*n + 2 -4)] = 0;
-							}	 					
-						}
+<head>
+    <title>nihao...</title>
+</head>
+<body>
+<canvas id="canvas" width="400" height="650">haha</canvas>
+<script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    var image = new Image();
+    var sourceWidth = canvas.width;
+    var sourceHeight = canvas.height;
+    var dx = 0;
+    var dy = 0;
 
-						
-						temp = [r, g, b];
-						
-//						var white = 245;
-//						var black = 50;
-////						a.push([data[f +  (4*n)], data[f +  (4*n + 1)], data[f +  (4*n + 2)], data[f +  (4*n + 3)]]);						
-//						
-//						var r = data[f +  (4*n)];
-//						var g = data[f +  (4*n + 1)];
-//						var b = data[f + (4*n + 2)];
-//						
-//						var grayScale = getGrayScale(r, g, b);
-//						var tGrayScale = getGrayScale(temp[0], temp[1], temp[2]);
-//						
-//						
-//						if(temp.length > 0) {
-//							// 白色
-//							if(tGrayScale >= white) {
-//								if(grayScale > black) {
-//									// 变成白色
-//									data[f +  (4*n)] = 255;
-//									data[f +  (4*n + 1)] = 255;
-//									data[f + (4*n + 2)] = 255;
-//								} else {
-//									// 变成黑色
-//									data[f +  (4*n)] = 0;
-//									data[f +  (4*n + 1)] = 0;
-//									data[f + (4*n + 2)] = 0;
-//								}
-//								data[f +  (4*n -4)] = 255;
-//								data[f +  (4*n + 1 - 4)] = 255;
-//								data[f + (4*n + 2 -4)] = 255;
-//									
-//							} else if(tGrayScale <= black) {
-//								// 变成白色
-//								data[f +  (4*n)] = 255;
-//								data[f +  (4*n + 1)] = 255;
-//								data[f + (4*n + 2)] = 255;
-//
-//								data[f +  (4*n - 4)] = 0;
-//								data[f +  (4*n + 1 - 4)] = 0;
-//								data[f + (4*n + 2 - 4)] = 0;										
-//							} else {
-//								 if(grayScale <= black) {
-//									// 变成白色
-//									data[f +  (4*n)] = 0;
-//									data[f +  (4*n + 1)] = 0;
-//									data[f + (4*n + 2)] = 0;
-//								} else {
-//									data[f +  (4*n)] = 255;
-//									data[f +  (4*n + 1)] = 255;
-//									data[f + (4*n + 2)] = 255;				
-//								}
-//									
-//									data[f +  (4*n - 4)] = 255;
-//									data[f +  (4*n + 1 -4)] = 255;
-//									data[f + (4*n + 2 -4)] = 255;
-//							}
-//							
-//							
-//						}
-//						
-//						temp = [r,g,b];
-						
-						
-						
-						// 灰度算法
+    function getGrayScale(r, g, b) {
+        return (r * 0.3 + g * 0.59 + b * 0.11) | 0;
+    }
+
+    function getAvg(r, g, b) {
+        return (r + g + b) / 3;
+    }
+
+    function foo(dx, dy, sourceWidth, sourceHeight) {
+        var imageData = ctx.getImageData(dx, dy, sourceWidth, sourceHeight),
+            data      = imageData.data;
+
+        var newData = [];
+
+        // m 行
+        for (var m = 0; m < sourceHeight; m++) {
+            // n 列
+            var f    = 4 * sourceWidth * m;
+            var temp = [];
+            for (var n = 0; n < sourceWidth; n++) {
+
+                var r   = data[f + (4 * n)];
+                var g   = data[f + (4 * n + 1)];
+                var b   = data[f + (4 * n + 2)];
+                var avg = getAvg(r, g, b);
+
+                if (avg >= 90) {
+                    data[f + (4 * n)]     = 255;
+                    data[f + (4 * n + 1)] = 255;
+                    data[f + (4 * n + 2)] = 255;
+                } else {
+                    data[f + (4 * n)]     = 0;
+                    data[f + (4 * n + 1)] = 0;
+                    data[f + (4 * n + 2)] = 0;
+                }
+
+                if (temp.length > 0) {
+                    var tAvg = getAvg(temp[0], temp[1], temp[2]);
+                    if (tAvg < 90 && avg < 90) {
+                        data[f + (4 * n)]     = 255;
+                        data[f + (4 * n + 1)] = 255;
+                        data[f + (4 * n + 2)] = 255;
+                    } else if (avg >= 90 && tAvg < 90) {
+                        data[f + (4 * n - 4)]     = 0;
+                        data[f + (4 * n + 1 - 4)] = 0;
+                        data[f + (4 * n + 2 - 4)] = 0;
+                    }
+                }
+
+
+                temp = [r, g, b];
+                // 灰度算法
 //						var grayScale = (data[f +  (4*n)] * 0.3 + data[f +  (4*n + 1)] * 0.59 + data[f +  (4*n + 2)] * 0.11) | 0;
 //						data[f +  (4*n)] = grayScale;
 //						data[f +  (4*n + 1)] = grayScale;
 //						data[f + (4*n + 2)] = grayScale;
 //						var grayScale = (data[f +  (4*n)]+ data[f +  (4*n + 1)]+ data[f +  (4*n + 2)])/ 3;
 
-						//RGBA
-					}
+                //RGBA
+            }
 //					newData.push(a);
-				}
-				ctx.putImageData(imageData, dx, dy);
-			}
-			
-			
-			image.onload = function() {
-				ctx.drawImage(image, dx, dy, sourceWidth, sourceHeight);
-				foo(dx, dy, sourceWidth, sourceHeight);
-			};
-			
-			image.src = "/test.jpg";
-		</script>
-	</body>
+        }
+        ctx.putImageData(imageData, dx, dy);
+    }
+
+
+    image.onload = function () {
+        ctx.drawImage(image, dx, dy, sourceWidth, sourceHeight);
+        foo(dx, dy, sourceWidth, sourceHeight);
+    };
+
+    image.src = "/test.jpg";
+</script>
+</body>
 
 </html>
