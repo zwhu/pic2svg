@@ -21,11 +21,7 @@ fs.readFile(__dirname + '/test.jpg', function (err, squid) {
 });
 
 function getGrayScale(r, g, b) {
-  return (r * 0.3 + g * 0.59 + b * 0.11) | 0;
-}
-
-function getAvg(r, g, b) {
-  return (r + g + b) / 3;
+  return (r * 38 + g * 75 + b * 15) >> 7;
 }
 
 function foo(dx, dy, sourceWidth, sourceHeight) {
@@ -44,32 +40,37 @@ function foo(dx, dy, sourceWidth, sourceHeight) {
       var r   = data[f + (4 * n)];
       var g   = data[f + (4 * n + 1)];
       var b   = data[f + (4 * n + 2)];
-      var avg = getAvg(r, g, b);
+      var white = 245;
+      var black = 50; 
+      var grayScale = getGrayScale(r, g, b);
 
-      if (avg >= 90) {
-        data[f + (4 * n)]     = 255;
-        data[f + (4 * n + 1)] = 255;
-        data[f + (4 * n + 2)] = 255;
-      } else {
-        data[f + (4 * n)]     = 0;
-        data[f + (4 * n + 1)] = 0;
-        data[f + (4 * n + 2)] = 0;
-      }
-
-      if (temp.length > 0) {
-        var tAvg = getAvg(temp[0], temp[1], temp[2]);
-        if (tAvg < 90 && avg < 90) {
-          data[f + (4 * n)]     = 255;
-          data[f + (4 * n + 1)] = 255;
-          data[f + (4 * n + 2)] = 255;
-        } else if (avg >= 90 && tAvg < 90) {
-          data[f + (4 * n - 4)]     = 0;
-          data[f + (4 * n + 1 - 4)] = 0;
-          data[f + (4 * n + 2 - 4)] = 0;
-        }
-      }
-
-      temp = [r, g, b];
+//      if (grayScale >= 90) {
+//        data[f + (4 * n)]     = 255;
+//        data[f + (4 * n + 1)] = 255;
+//        data[f + (4 * n + 2)] = 255;
+//      } else {
+//        data[f + (4 * n)]     = 0;
+//        data[f + (4 * n + 1)] = 0;
+//        data[f + (4 * n + 2)] = 0;
+//      }
+//
+//      if (temp.length > 0) {
+//        var tGrayScale = getGrayScale(temp[0], temp[1], temp[2]);
+//        if (tGrayScale < 90 && grayScale < 90) {
+//          data[f + (4 * n)]     = 255;
+//          data[f + (4 * n + 1)] = 255;
+//          data[f + (4 * n + 2)] = 255;
+//        } else if (grayScale >= 90 && tGrayScale < 90) {
+//          data[f + (4 * n - 4)]     = 0;
+//          data[f + (4 * n + 1 - 4)] = 0;
+//          data[f + (4 * n + 2 - 4)] = 0;
+//        }
+//      }
+//
+//      temp = [r, g, b];
+					data[f +  (4*n)] = grayScale;
+					data[f +  (4*n + 1)] = grayScale;
+					data[f + (4*n + 2)] = grayScale;    
     }
   }
   ctx.putImageData(imageData, dx, dy);

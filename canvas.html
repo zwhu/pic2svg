@@ -15,64 +15,51 @@
     var dy = 0;
 
     function getGrayScale(r, g, b) {
-        return (r * 0.3 + g * 0.59 + b * 0.11) | 0;
+        return (r * 38 + g * 75 + b * 15) >> 7;
     }
 
-    function getAvg(r, g, b) {
-        return (r + g + b) / 3;
+    function isSame(a, b) {
+        if(a.length !== b.length) {
+            return false;
+        }
+        for(var i = 0; i < a.length; i++) {
+            if(a[i] !== b[i])
+                return false;
+        }
+        return true;
     }
 
     function foo(dx, dy, sourceWidth, sourceHeight) {
         var imageData = ctx.getImageData(dx, dy, sourceWidth, sourceHeight),
             data      = imageData.data;
 
-        var newData = [];
-
         // m 行
         for (var m = 0; m < sourceHeight; m++) {
             // n 列
             var f    = 4 * sourceWidth * m;
-            var temp = [];
+            var temp;
+            var base = 10;
             for (var n = 0; n < sourceWidth; n++) {
 
                 var r   = data[f + (4 * n)];
                 var g   = data[f + (4 * n + 1)];
                 var b   = data[f + (4 * n + 2)];
-                var avg = getAvg(r, g, b);
-
-                if (avg >= 90) {
-                    data[f + (4 * n)]     = 255;
-                    data[f + (4 * n + 1)] = 255;
-                    data[f + (4 * n + 2)] = 255;
-                } else {
-                    data[f + (4 * n)]     = 0;
-                    data[f + (4 * n + 1)] = 0;
-                    data[f + (4 * n + 2)] = 0;
-                }
-
-                if (temp.length > 0) {
-                    var tAvg = getAvg(temp[0], temp[1], temp[2]);
-                    if (tAvg < 90 && avg < 90) {
-                        data[f + (4 * n)]     = 255;
-                        data[f + (4 * n + 1)] = 255;
-                        data[f + (4 * n + 2)] = 255;
-                    } else if (avg >= 90 && tAvg < 90) {
-                        data[f + (4 * n - 4)]     = 0;
-                        data[f + (4 * n + 1 - 4)] = 0;
-                        data[f + (4 * n + 2 - 4)] = 0;
+                var avg = getGrayScale(r, g, b);
+                
+                if(temp) {
+                    if(Math.abs(temp - avg) > base) {
+                       data[f + (4 * n)] = 0;
+                       data[f + (4 * n + 1)] = 0;
+                       data[f + (4 * n + 2)] = 0;
+                    } else if(Math.abs(temp - avg) <= base) {
+                       data[f + (4 * n)] = 255;
+                       data[f + (4 * n + 1)] = 255;
+                       data[f + (4 * n + 2)] = 255; 
                     }
+                    
                 }
 
-
-                temp = [r, g, b];
-                // 灰度算法
-//						var grayScale = (data[f +  (4*n)] * 0.3 + data[f +  (4*n + 1)] * 0.59 + data[f +  (4*n + 2)] * 0.11) | 0;
-//						data[f +  (4*n)] = grayScale;
-//						data[f +  (4*n + 1)] = grayScale;
-//						data[f + (4*n + 2)] = grayScale;
-//						var grayScale = (data[f +  (4*n)]+ data[f +  (4*n + 1)]+ data[f +  (4*n + 2)])/ 3;
-
-                //RGBA
+                temp = avg;
             }
 //					newData.push(a);
         }
@@ -85,7 +72,7 @@
         foo(dx, dy, sourceWidth, sourceHeight);
     };
 
-    image.src = "/test.jpg";
+    image.src = "/test2.jpg";
 </script>
 </body>
 
