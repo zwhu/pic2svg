@@ -18,18 +18,7 @@
         return (r * 38 + g * 75 + b * 15) >> 7;
     }
 
-    function isSame(a, b) {
-        if(a.length !== b.length) {
-            return false;
-        }
-        for(var i = 0; i < a.length; i++) {
-            if(a[i] !== b[i])
-                return false;
-        }
-        return true;
-    }
-
-    function foo(dx, dy, sourceWidth, sourceHeight) {
+    function draw(dx, dy, sourceWidth, sourceHeight) {
         var imageData = ctx.getImageData(dx, dy, sourceWidth, sourceHeight),
             data      = imageData.data;
 
@@ -61,7 +50,6 @@
 
                 temp = avg;
             }
-//					newData.push(a);
         }
         ctx.putImageData(imageData, dx, dy);
     }
@@ -69,7 +57,7 @@
 
     image.onload = function () {
         ctx.drawImage(image, dx, dy, sourceWidth, sourceHeight);
-        foo(dx, dy, sourceWidth, sourceHeight);
+        draw(dx, dy, sourceWidth, sourceHeight);
     };
 
     image.src = "/test2.jpg";
